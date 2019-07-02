@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class PartolState : IAIState
 {
-    public PartolState(){
+
+    private Transform[] m_PatrolPoints;
+    
+    public PartolState(Transform[] _partorlPoints){
         StateName = "PartolState";
+        m_PatrolPoints=_partorlPoints;
     }
 
     //状态开始动作
     public override void StateStart(){
         Debug.Log("=====>>"+StateName+" Start!!!");
+        Debug.Log("巡逻点：");
+        foreach (var point in m_PatrolPoints)
+        {
+            Debug.Log(point.name);
+        }
     }
 
 
@@ -26,4 +35,14 @@ public class PartolState : IAIState
     public override void StateEnd(){
       Debug.Log("=====>>"+StateName+" End!!!");
     }
+
+
+    //寻找目标
+    private bool canSeeObject(){
+        return false;
+    }
+
+    
+
+    
 }
