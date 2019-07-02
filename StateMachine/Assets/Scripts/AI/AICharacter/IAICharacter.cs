@@ -19,8 +19,10 @@ public abstract class IAICharacter
 
         //退出当前状态
         m_AIState?.StateEnd();
+
         //赋予新的状态
         m_AIState = _newAIState;
+        
         //更新(状态拥有者)
         _newAIState.SetAICharacter(this);
         
