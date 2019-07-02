@@ -15,27 +15,23 @@ public abstract class IAICharacter
             return;
         }
            
-        //Debug.Log状态
-        Debug.Log("改变状态："+_newAIState.StateName);
 
 
         //退出当前状态
-        Debug.Log("结束状态："+m_AIState.StateName);
-        m_AIState.StateEnd();
+        m_AIState?.StateEnd();
         //赋予新的状态
         m_AIState = _newAIState;
         //更新(状态拥有者)
         _newAIState.SetAICharacter(this);
         
         //开始当前状态
-        Debug.Log("开始状态："+m_AIState.StateName);
         m_AIState.StateStart();
 
     }
 
 
     //更新
-    public  void Update(){
+    public  virtual void Update(){
         m_AIState.StateUpdate();
     }
     
