@@ -5,6 +5,7 @@ using UnityEngine;
 public class AIController : MonoBehaviour
 {
     //AICharacter
+    public GameObject prefab;
     private EnemyCharacter m_EnemyCharacter;
 
 
@@ -15,8 +16,9 @@ public class AIController : MonoBehaviour
     
     void Awake() {  
         //
-
-        m_EnemyCharacter = new EnemyCharacter(patrolPoints);
+        prefab = transform.gameObject;
+        m_EnemyCharacter = new EnemyCharacter(patrolPoints,this);
+        
         
     }
 

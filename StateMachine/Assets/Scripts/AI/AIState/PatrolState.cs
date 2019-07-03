@@ -20,6 +20,7 @@ public class PartolState : IAIState
         {
             Debug.Log(point.name);
         }
+        getClosestPoint();
     }
 
 
@@ -40,6 +41,20 @@ public class PartolState : IAIState
     //寻找目标
     private bool canSeeObject(){
         return false;
+    }
+
+    //寻找最近的点
+    private Transform getClosestPoint(){
+        Vector3 _currentPositon = ((EnemyCharacter)m_Character).MyAIController.prefab.transform.position;
+        //Debug.Log(((EnemyCharacter)m_Character).MyAIController.prefab.transform.position);
+        //Debug.Log("Enemy Position: "+((EnemyCharacter)m_Character).Controller.prefab.transform.position);
+        double _minDistance = Vector3.Distance(m_PatrolPoints[0].position,_currentPositon); 
+        for(int i = 1;i<m_PatrolPoints.Length;i++){
+            if(_minDistance>Vector3.Distance(_currentPositon,m_PatrolPoints[i].position)){
+                
+            }
+        }
+        return null;
     }
 
     
