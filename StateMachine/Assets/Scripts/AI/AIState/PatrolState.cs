@@ -34,6 +34,7 @@ public class PartolState : IAIState
         // {
         //     Debug.Log(point.name);
         // }
+        m_TargetPoint = GetNextTargetPoint(true);
         
     }
 
@@ -45,7 +46,7 @@ public class PartolState : IAIState
         //     m_Character.ChangeState(new ChaseState());
         // }
         if(Input.GetKeyDown(KeyCode.S)){
-            m_TargetPoint = getNextTargetPoint();
+            m_TargetPoint = GetNextTargetPoint(false);
         }
        
         //检查是否到达目标点
@@ -54,14 +55,14 @@ public class PartolState : IAIState
         //是否到达目标点
         if(m_IsArrived){
             //获取下一目标点
-            m_TargetPoint = getNextTargetPoint();
+            m_TargetPoint = GetNextTargetPoint(false);
             m_IsArrived = false;
         }
         else{
             //看向目标点
             m_prefabTrans.LookAt(m_TargetPoint);
             //前往目标点
-            m_prefabTrans.Translate(m_prefabTrans.forward*Time.deltaTime,Space.World);
+            m_prefabTrans.Translate(m_prefabTrans.forward*2*Time.deltaTime,Space.World);
             
         }
         
@@ -83,56 +84,24 @@ public class PartolState : IAIState
         return false;
     }
 
-    //寻找最近的点
-    private Transform getNextTargetPoint(){
-        //检查是否所有点都访问过一遍
-        int _visitedPointCount = 0;
-        for(;_visitedPointCount<m_IsVisited.Length;_visitedPointCount++){
-            if(!m_IsVisited[_visitedPointCount]){
-           // Debug.Log("有未访问的点"+_visitedPointCount);
-            break;
-            }
-        }
+    //寻找最近的点 参数flag = true时 被外界调用需要找最近的点作为目标点
+    //            参数flag = false时 被自身类所调用找未访问过的点 作为目标点
+    public Transform GetNextTargetPoint(bool flag){
+        //记录目标点下标
+        int index = 0;  
 
-      
-        
-        //如果巡逻点访问过一遍 重置标记访问数组
-        if(_visitedPointCount == m_IsVisited.Length){
-            for(int j=0;j<m_IsVisited.Length;j++){
-                 m_IsVisited[j]=false;
-            }
-             Debug.Log("重置标记访问数组");
-        }
+        //外界调用 找距离最近的点作为目标点
+        if(flag){
+             //当前位置
+            Vector3 _currentPositon = m_prefabTrans.position;
+            
+            //找到最近的点
+            double _minDistance = Vector3.Distance(m_PatrolPoints[0].position,_currentPositon);
+            
+            double _tempDistance = 0 ; 
+            
 
-
-        //当前位置
-        Vector3 _currentPositon = m_prefabTrans.position;
-
-        int index = 0;
-        //寻找目前最近的位置
-        //double _minDistance = Vector3.Distance(m_PatrolPoints[0].position,_currentPositon);
-
-
-        //找到最近的点
-        double _minDistance = Vector3.Distance(m_PatrolPoints[0].position,_currentPositon);
-
-        double _tempDistance = 0 ; 
-        
-        //找到第一个可以访问的点
-        for(int k = 0;k<m_IsVisited.Length;k++){
-            //如果未访问 
-            if(!m_IsVisited[k]){
-                _minDistance = Vector3.Distance(m_PatrolPoints[k].position,_currentPositon);
-                index = k;
-                break;
-            }
-        }
-
-        for(int i = 0;i<m_IsVisited.Length;i++){
-            //如果被访问过 跳过该点
-            if(m_IsVisited[i]){
-                continue;
-            }
+        for(int i = 1;i<m_PatrolPoints.Length;i++){
             _tempDistance = Vector3.Distance(_currentPositon,m_PatrolPoints[i].position);
             if(_minDistance> _tempDistance){
                 index = i;
@@ -146,7 +115,58 @@ public class PartolState : IAIState
         Debug.Log(m_IsVisited[0]+" "+m_IsVisited[1]+" "+m_IsVisited[2]+" "+m_IsVisited[3]+" "+m_IsVisited[4]);
 
         return m_PatrolPoints[index];
+        }
+
+        //检查是否所有点都访问过一遍
+        int _visitedPointCount = 0;
+        for(;_visitedPointCount<m_IsVisited.Length;_visitedPointCount++){
+            if(!m_IsVisited[_visitedPointCount]){
+           // Debug.Log("有未访问的点"+_visitedPointCount);
+            break;
+            }
+        }
+
+      
+        //如果巡逻点访问过一遍 重置标记访问数组
+        if(_visitedPointCount == m_IsVisited.Length){
+            for(int j=0;j<m_IsVisited.Length;j++){
+                 m_IsVisited[j]=false;
+            }
+             Debug.Log("重置标记访问数组");
+        }
+
+        //获取当前目标点下标
+        int _currentTargetPointIndex = 0;
+        for(int i = 0;i<m_PatrolPoints.Length;i++){
+            if(m_PatrolPoints[i].Equals(m_TargetPoint)){
+                _currentTargetPointIndex = i;
+                Debug.Log("CurrentIndex:"+_currentTargetPointIndex);
+                break;
+            }
+        }
+
+        //寻找下一目标点
+        while(true){
+            //未被访问
+            _currentTargetPointIndex=_currentTargetPointIndex%m_IsVisited.Length;
+            if(!m_IsVisited[_currentTargetPointIndex]){
+                index = _currentTargetPointIndex;
+                break;
+            }
+            _currentTargetPointIndex++;
+        }
+        Debug.Log("Find :"+m_PatrolPoints[index].name);
+        //标记访问
+        m_IsVisited[index]=true;
+
+        Debug.Log(m_IsVisited[0]+" "+m_IsVisited[1]+" "+m_IsVisited[2]+" "+m_IsVisited[3]+" "+m_IsVisited[4]);
+
+        return m_PatrolPoints[index];
+
+
     }
+
+    
 
     
 
