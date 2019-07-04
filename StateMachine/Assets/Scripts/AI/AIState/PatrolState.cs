@@ -28,26 +28,29 @@ public class PartolState : IAIState
     //状态开始动作
     public override void StateStart(){
         m_prefabTrans = ((EnemyCharacter)m_Character).MyAIController.prefab.transform;
-        Debug.Log("=====>>"+StateName+" Start!!!");
-        Debug.Log("巡逻点：");
-        foreach (var point in m_PatrolPoints)
-        {
-            Debug.Log(point.name);
-        }
+        //Debug.Log("=====>>"+StateName+" Start!!!");
+        //Debug.Log("巡逻点：");
+        // foreach (var point in m_PatrolPoints)
+        // {
+        //     Debug.Log(point.name);
+        // }
         
     }
 
 
     //状态更新动作
     public override void StateUpdate(){
-        Debug.Log("=====>>"+StateName+" Update!!!");
+        //Debug.Log("=====>>"+StateName+" Update!!!");
         // if(Input.GetKeyDown(KeyCode.D)){
         //     m_Character.ChangeState(new ChaseState());
         // }
         if(Input.GetKeyDown(KeyCode.S)){
             m_TargetPoint = getNextTargetPoint();
         }
-
+       
+        //检查是否到达目标点
+        m_IsArrived  = isArrived(m_prefabTrans.position,m_TargetPoint.position,0.2f);
+        Debug.Log("是否到达："+m_IsArrived);
         //是否到达目标点
         if(m_IsArrived){
             //获取下一目标点
@@ -69,6 +72,11 @@ public class PartolState : IAIState
       Debug.Log("=====>>"+StateName+" End!!!");
     }
 
+    //检查是否到达目标点
+    private bool isArrived(Vector3 soucrePoint,Vector3 targetPoint,float radius){
+        return Vector3.Distance(soucrePoint,targetPoint)<radius;
+    }
+
 
     //寻找目标
     private bool canSeeObject(){
@@ -81,12 +89,12 @@ public class PartolState : IAIState
         int _visitedPointCount = 0;
         for(;_visitedPointCount<m_IsVisited.Length;_visitedPointCount++){
             if(!m_IsVisited[_visitedPointCount]){
-            Debug.Log("有未访问的点"+_visitedPointCount);
+           // Debug.Log("有未访问的点"+_visitedPointCount);
             break;
             }
         }
 
-        Debug.Log(m_IsVisited[0]+" "+m_IsVisited[1]+" "+m_IsVisited[2]+" "+m_IsVisited[3]+" "+m_IsVisited[4]);
+      
         
         //如果巡逻点访问过一遍 重置标记访问数组
         if(_visitedPointCount == m_IsVisited.Length){
@@ -110,14 +118,23 @@ public class PartolState : IAIState
 
         double _tempDistance = 0 ; 
         
+        //找到第一个可以访问的点
+        for(int k = 0;k<m_IsVisited.Length;k++){
+            //如果未访问 
+            if(!m_IsVisited[k]){
+                _minDistance = Vector3.Distance(m_PatrolPoints[k].position,_currentPositon);
+                index = k;
+                break;
+            }
+        }
 
         for(int i = 0;i<m_IsVisited.Length;i++){
-            //h回来改！
-            if(m_IsArrived[i]){
-
+            //如果被访问过 跳过该点
+            if(m_IsVisited[i]){
+                continue;
             }
             _tempDistance = Vector3.Distance(_currentPositon,m_PatrolPoints[i].position);
-            if(_minDistance> _tempDistance&&!m_PatrolPoints[i].Equals(m_TargetPoint)&&!m_IsVisited[i]){
+            if(_minDistance> _tempDistance){
                 index = i;
                 _minDistance = _tempDistance;
             }
@@ -125,6 +142,9 @@ public class PartolState : IAIState
         Debug.Log("Find :"+m_PatrolPoints[index].name);
         //标记访问
         m_IsVisited[index]=true;
+
+        Debug.Log(m_IsVisited[0]+" "+m_IsVisited[1]+" "+m_IsVisited[2]+" "+m_IsVisited[3]+" "+m_IsVisited[4]);
+
         return m_PatrolPoints[index];
     }
 
