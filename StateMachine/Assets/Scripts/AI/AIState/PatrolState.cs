@@ -82,7 +82,8 @@ public class PartolState : IAIState
         }
         else{
             //看向目标点
-            m_prefabTrans.LookAt(m_targetPoint);
+            //m_prefabTrans.LookAt(m_targetPoint);
+            m_prefabTrans.rotation = Quaternion.Lerp(m_prefabTrans.rotation, Quaternion.LookRotation(m_targetPoint.position-m_prefabTrans.position), 0.2f);
             //前往目标点
             m_prefabTrans.Translate(m_prefabTrans.forward*2*Time.deltaTime,Space.World);
             

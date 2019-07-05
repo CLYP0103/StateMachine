@@ -11,6 +11,9 @@ public class ChaseState : IAIState
     //追击目标Transform
     private Transform m_targetTransform;
 
+    //追击速度
+    public float chaseSpeed;
+
 
     //追击最大距离
     public float maxCharseDistance;
@@ -32,8 +35,8 @@ public class ChaseState : IAIState
         
         //初始化追击参数    
         maxCharseDistance = 8f;
-        cathedDistance = 1.5f;
-
+        cathedDistance = 1f;
+        chaseSpeed = 3.5f;
         
 
     }
@@ -51,16 +54,17 @@ public class ChaseState : IAIState
         }
 
         //2.是否追到目标点
-        if(isArrived(m_prefabTrans.transform.position,m_prefabTrans.transform.position,cathedDistance)){
+        if(isArrived(m_prefabTrans.transform.position,m_targetTransform.transform.position,cathedDistance)){
             //追到  切换巡逻状态
             Debug.Log("Catch!!!!"+m_targetTransform.name);
             m_Character.ChangeState(new PartolState(((EnemyCharacter)m_Character).PatrolPoints));
         }
        
         //看向目标点
-        m_prefabTrans.LookAt(m_targetTransform);
+        //m_prefabTrans.LookAt(m_targetTransform);
+        m_prefabTrans.rotation = Quaternion.Lerp(m_prefabTrans.rotation, Quaternion.LookRotation(m_targetTransform.position-m_prefabTrans.position), 0.1f);
         //前往目标点
-        m_prefabTrans.Translate(m_prefabTrans.forward*3*Time.deltaTime,Space.World);
+        m_prefabTrans.Translate(m_prefabTrans.forward*chaseSpeed*Time.deltaTime,Space.World);
 
 
     }
