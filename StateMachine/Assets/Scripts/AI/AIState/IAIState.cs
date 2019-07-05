@@ -6,7 +6,7 @@ public abstract class IAIState
 {
     
     //状态名称
-    private string m_StateName;
+    private string m_stateName;
     public string StateName{get;set;}
 
 

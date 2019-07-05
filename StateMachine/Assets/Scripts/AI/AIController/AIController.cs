@@ -6,7 +6,7 @@ public class AIController : MonoBehaviour
 {
     //AICharacter
     public GameObject prefab;
-    private EnemyCharacter m_EnemyCharacter;
+    private EnemyCharacter m_enemyCharacter;
 
 
 
@@ -17,7 +17,7 @@ public class AIController : MonoBehaviour
     void Awake() {  
         //
         prefab = transform.gameObject;
-        m_EnemyCharacter = new EnemyCharacter(patrolPoints,this);
+        m_enemyCharacter = new EnemyCharacter(patrolPoints,this);
         
         
     }
@@ -30,6 +30,6 @@ public class AIController : MonoBehaviour
 
     void Update()
     {
-        m_EnemyCharacter.Update();
+        m_enemyCharacter.Update();
     }
 }
