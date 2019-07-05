@@ -47,7 +47,7 @@ public class PartolState : IAIState
     public override void StateStart(){
         m_prefabTrans = ((EnemyCharacter)m_Character).MyAIController.prefab.transform;
         Debug.Log("=====>>"+StateName+" Start!!!");
-        Debug.Log("=============================");
+        Debug.Log("===============");
         m_targetPoint = GetNextTargetPoint(true);
 
         //初始化视野
@@ -61,8 +61,8 @@ public class PartolState : IAIState
 
     //状态更新动作
     public override void StateUpdate(){
-        Debug.Log("=====>>"+StateName+" Update!!!");
-        Debug.Log("=============================");
+        //Debug.Log("=====>>"+StateName+" Update!!!");
+        //Debug.Log("===============");
         //是否看到目标
         if(canSeeObject()){
             m_Character.ChangeState(new ChaseState(targetTransform));
@@ -74,7 +74,6 @@ public class PartolState : IAIState
        
         //检查是否到达目标点
         m_isArrived  = isArrived(m_prefabTrans.position,m_targetPoint.position,0.2f);
-        Debug.Log("是否到达："+m_isArrived);
         //是否到达目标点
         if(m_isArrived){
             //获取下一目标点
@@ -94,7 +93,7 @@ public class PartolState : IAIState
     //状态结束动作
     public override void StateEnd(){
       Debug.Log("=====>>"+StateName+" End!!!");
-      Debug.Log("=============================");
+      Debug.Log("===============");
     }
 
     //检查是否到达目标点
@@ -164,11 +163,11 @@ public class PartolState : IAIState
                 _minDistance = _tempDistance;
             }
         }
-        Debug.Log("Find :"+m_patrolPoints[index].name);
+        //Debug.Log("Find :"+m_patrolPoints[index].name);
         //标记访问
         m_isVisited[index]=true;
 
-        Debug.Log(m_isVisited[0]+" "+m_isVisited[1]+" "+m_isVisited[2]+" "+m_isVisited[3]+" "+m_isVisited[4]);
+        //Debug.Log(m_isVisited[0]+" "+m_isVisited[1]+" "+m_isVisited[2]+" "+m_isVisited[3]+" "+m_isVisited[4]);
 
         return m_patrolPoints[index];
         }
@@ -188,7 +187,7 @@ public class PartolState : IAIState
             for(int j=0;j<m_isVisited.Length;j++){
                  m_isVisited[j]=false;
             }
-             Debug.Log("重置标记访问数组");
+             //Debug.Log("重置标记访问数组");
         }
 
         //获取当前目标点下标
@@ -196,7 +195,6 @@ public class PartolState : IAIState
         for(int i = 0;i<m_patrolPoints.Length;i++){
             if(m_patrolPoints[i].Equals(m_targetPoint)){
                 _currentTargetPointIndex = i;
-                Debug.Log("CurrentIndex:"+_currentTargetPointIndex);
                 break;
             }
         }
@@ -211,11 +209,11 @@ public class PartolState : IAIState
             }
             _currentTargetPointIndex++;
         }
-        Debug.Log("Find :"+m_patrolPoints[index].name);
+        //Debug.Log("Find :"+m_patrolPoints[index].name);
         //标记访问
         m_isVisited[index]=true;
 
-        Debug.Log(m_isVisited[0]+" "+m_isVisited[1]+" "+m_isVisited[2]+" "+m_isVisited[3]+" "+m_isVisited[4]);
+       // Debug.Log(m_isVisited[0]+" "+m_isVisited[1]+" "+m_isVisited[2]+" "+m_isVisited[3]+" "+m_isVisited[4]);
 
         return m_patrolPoints[index];
 

@@ -26,13 +26,13 @@ public class ChaseState : IAIState
     //状态开始动作
     public override void StateStart(){
         Debug.Log("=====>>"+StateName+" Start!!!");
-        Debug.Log("=============================");
+        Debug.Log("===============");
 
         m_prefabTrans = ((EnemyCharacter)m_Character).MyAIController.prefab.transform;
         
         //初始化追击参数    
         maxCharseDistance = 8f;
-        cathedDistance = 0.5f;
+        cathedDistance = 1.5f;
 
         
 
@@ -41,8 +41,8 @@ public class ChaseState : IAIState
 
     //状态更新动作
     public override void StateUpdate(){
-        Debug.Log("=====>>"+StateName+" Update!!!");
-        Debug.Log("=============================");
+        // Debug.Log("=====>>"+StateName+" Update!!!");
+        // Debug.Log("===============");
 
         //1.是否超出距离
         if(!isArrived(m_prefabTrans.transform.position,m_prefabTrans.transform.position,maxCharseDistance)){
@@ -68,7 +68,7 @@ public class ChaseState : IAIState
     //状态结束动作
     public override void StateEnd(){
       Debug.Log("=====>>"+StateName+" End!!!");
-      Debug.Log("=============================");
+      Debug.Log("===============");
     }
   
 
