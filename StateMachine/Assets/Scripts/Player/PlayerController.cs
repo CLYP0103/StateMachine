@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
 
     //移动速度
     public float walkSpeed;
-
+    
     void Start()
     {
         walkSpeed = 4f;
@@ -30,5 +28,5 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.S)){
             transform.Translate(-1*transform.forward*walkSpeed*Time.deltaTime,Space.World);
         } 
-    }
+    } 
 }
