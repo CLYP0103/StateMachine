@@ -34,7 +34,7 @@ public class ChaseState : IAIState
         m_prefabTrans = ((EnemyCharacter)m_Character).MyAIController.prefab.transform;
         
         //初始化追击参数    
-        maxCharseDistance = 8f;
+        maxCharseDistance = 5f;
         cathedDistance = 1f;
         chaseSpeed = 3.5f;
         
@@ -48,7 +48,7 @@ public class ChaseState : IAIState
         // Debug.Log("===============");
 
         //1.是否超出距离
-        if(!isArrived(m_prefabTrans.transform.position,m_prefabTrans.transform.position,maxCharseDistance)){
+        if(!isArrived(m_prefabTrans.transform.position,m_targetTransform.transform.position,maxCharseDistance)){
             //超出最大追击距离 放弃追击
             m_Character.ChangeState(new PartolState(((EnemyCharacter)m_Character).PatrolPoints));
         }

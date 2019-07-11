@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        walkSpeed = 3f;
+        walkSpeed = 4f;
     }
 
     void Update()

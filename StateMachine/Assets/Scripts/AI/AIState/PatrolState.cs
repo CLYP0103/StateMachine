@@ -33,6 +33,10 @@ public class PartolState : IAIState
     //目标Transform
     public Transform targetTransform;
 
+    //巡逻速度
+    public float partolSpeed;
+
+
 
 
     public PartolState(Transform[] _partorlPoints){
@@ -56,6 +60,7 @@ public class PartolState : IAIState
         viewDistance = 5;
         m_subAngle = viewAngle/2/accurte;
         targetTageName = "Player";
+        partolSpeed=2f;
     }
 
 
@@ -85,7 +90,7 @@ public class PartolState : IAIState
             //m_prefabTrans.LookAt(m_targetPoint);
             m_prefabTrans.rotation = Quaternion.Lerp(m_prefabTrans.rotation, Quaternion.LookRotation(m_targetPoint.position-m_prefabTrans.position), 0.2f);
             //前往目标点
-            m_prefabTrans.Translate(m_prefabTrans.forward*2*Time.deltaTime,Space.World);
+            m_prefabTrans.Translate(m_prefabTrans.forward*partolSpeed*Time.deltaTime,Space.World);
             
         }
         
